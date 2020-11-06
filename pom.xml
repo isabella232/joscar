@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jitsi</groupId>
+    <artifactId>joscar</artifactId>
+    <version>0.9.3-jitsi-1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>joscar parent</name>
+    <description>joscar is an easy-to-use, robust library for connecting to AOL Instant Messenger
+        from Java.
+    </description>
+    <url>https://github.com/jitsi/joscar</url>
+
+    <licenses>
+        <license>
+            <name>BSD-3-Clause</name>
+            <url>https://spdx.org/licenses/BSD-3-Clause.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>org.jitsi</id>
+            <name>Jitsi Team</name>
+            <email>dev@jitsi.org</email>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>aolrtf</module>
+        <module>client</module>
+        <module>common</module>
+        <module>demo</module>
+        <module>protocol</module>
+    </modules>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/jitsi/joscar</developerConnection>
+        <connection>scm:git:https://github.com/jitsi/joscar</connection>
+        <url>https://github.com/jitsi/joscar</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/jitsi/joscar/issues</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>20.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jitsi</groupId>
+                <artifactId>jsocks</artifactId>
+                <version>1.0.1-jitsi-1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>1.66</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>1.66</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>5.1.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <_noclassforname>true</_noclassforname>
+                        <Bundle-License>
+                            BSD-3-Clause;link="https://raw.githubusercontent.com/jitsi/joscar/master/LICENSE"
+                        </Bundle-License>
+                        <_removeheaders>
+                            Bnd-*,
+                            Tool,
+                            Require-Capability,
+                            Include-Resource,
+                            Build-Jdk-Spec
+                        </_removeheaders>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <taglet>net.kano.joscartools.taglets.FlapChannelTaglet</taglet>
+                    <taglet>net.kano.joscartools.taglets.RvProxySourceTaglet</taglet>
+                    <taglet>net.kano.joscartools.taglets.SnacCommandTaglet</taglet>
+                    <taglet>net.kano.joscartools.taglets.SnacSourceTaglet</taglet>
+                    <tagletArtifacts>
+                        <tagletArtifact>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>joscar-protocol-tools</artifactId>
+                            <version>${project.version}</version>
+                        </tagletArtifact>
+                    </tagletArtifacts>
+                    <doclint>none</doclint>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release-central</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+</project>
